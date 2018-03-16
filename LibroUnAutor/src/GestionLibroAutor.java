@@ -94,13 +94,36 @@ public class GestionLibroAutor {
 						Leer.mostrarEnPantalla("Si quieres lo cambio pero es un Libro");
 					}
 					break;
+				
+				default:
+					break;
+				}
+			case 8:
+				opc=Leer.pedirEntero("Que quieres ordenar? \n 1.- Libros \n 2. Autores\n 3. Comentarios", "[1-3]");
+				switch (opc) {
+				case 1:
+					Leer.mostrarEnPantalla(Arrays.toString(libros));
+				Arrays.sort(libros, 0, Libro.getContador());
+				Leer.mostrarEnPantalla(Arrays.toString(libros));
+					break;
 
+				case 2:
+					Leer.mostrarEnPantalla(Arrays.toString(autores));
+					Arrays.sort(autores, 0, Autor.getSiguiente());
+					Leer.mostrarEnPantalla(Arrays.toString(autores));
+					break;
+				case 3:
+					Leer.mostrarEnPantalla(Arrays.toString(comentarios));
+					Arrays.sort(comentarios, 0, Autor.getSiguiente()+ Libro.getContador()-2);
+					Leer.mostrarEnPantalla(Arrays.toString(comentarios));
+					break;	
 
 				default:
 					break;
 				}
+			default:
 				break;
-			}
+				}
 		} while (opcion != 0);
 
 	}
@@ -129,8 +152,8 @@ public class GestionLibroAutor {
 	private static Integer menu() {
 		Integer opcion;
 		Leer.mostrarEnPantalla("\n1- Crear autor.\n2- Crear libro.\n3- Modificar autor.\n" + "4- Modificar libro.\n" + "5- Listado de autores.\n"
-			+ "6- Listado de libros.\n" + "7- Comentar Libros y autores.\n"+"0- Salir.");
-		opcion = Leer.pedirEntero("\nElija opcion","[0-7]");
+			+ "6- Listado de libros.\n" + "7- Comentar Libros y autores.\n"+"8- Ordenar Vector\n"+"0- Salir.");
+		opcion = Leer.pedirEntero("\nElija opcion","[0-8]");
 		return opcion;
 	}//menu y opción
 
@@ -205,13 +228,13 @@ public class GestionLibroAutor {
 	public static Integer creaAutores(Autor []autores,Integer posAutor,Integer numComent, Comentable comentarios[]){
 		// creamos 3 autores
 		autores[0]= new Autor("Rosa Montero", "rmontero@gmail.com", 'f');
-		comentarios[numComent]= autores[0];
+		comentarios[Autor.getSiguiente()+Libro.getContador()-1]= autores[0];
 		numComent++;
 		autores[1]= new Autor("Juan Jose Millas", "jjmillas@hotmail.es",'m');
-		comentarios[numComent]= autores[1];
+		comentarios[Autor.getSiguiente()+Libro.getContador()-1]= autores[1];
 		numComent++;
 		autores[2]= new Autor("Almudena Grandes", "ag@gmail.com",'f');
-		comentarios[numComent]= autores[2];
+		comentarios[Autor.getSiguiente()+Libro.getContador()-1]= autores[2];
 		numComent++;
 		return 3;
 	}// crea 3 autores
@@ -219,19 +242,19 @@ public class GestionLibroAutor {
 	public static Integer creaLibros(Autor[] autores, Integer posLibro, Libro[] libros,Integer numComent,Comentable comentarios[]){
 		// creamos 5 libros
 		libros[0]= new Libro("Lágrimas en la lluvia", autores[0],19.95 ,100000);
-		comentarios[numComent]= libros[0];
+		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[0];
 		numComent++;
 		libros[1]= new Libro("La ridícula idea de no volver a verte", autores[0], 15., 200000);
-		comentarios[numComent]= libros[1];
+		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[1];
 		numComent++;
 		libros[2]= new Libro("Desde la sombra", autores[1], 25., 75000);
-		comentarios[numComent]= libros[2];
+		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[2];
 		numComent++;
 		libros[3]= new Libro("Malena es un nombre de tango", autores[2], 22., 100000);
-		comentarios[numComent]= libros[3];
+		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[3];
 		numComent++;
 		libros[4]= new Libro("Las edades de Lulú", autores[2], 30., 200000);
-		comentarios[numComent]= libros[4];
+		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[4];
 		numComent++;
 		 return 5;
 	}// crea 5 libros

@@ -1,16 +1,18 @@
 
-public class Libro implements Comentable {
+public class Libro implements Comentable, Comparable {
 	private String titulo;
 	private Autor autor;
 	private Double precio;
 	private Integer cantidad;
 	private String resena;
+	private static Integer contador=0;
 
 	public Libro(String titulo, Autor autor, Double precio) {
 		this.titulo = titulo;
 		this.autor = autor;
 		this.precio = precio;
 		cantidad = 0;
+		contador++;
 	}
 
 	public Libro(String titulo, Autor autor, Double precio, Integer cantidad) {
@@ -18,6 +20,21 @@ public class Libro implements Comentable {
 		this.autor = autor;
 		this.precio = precio;
 		this.cantidad = cantidad;
+		contador++;
+	}
+
+	@Override
+	public String toString() {
+		return "\nLibro [titulo=" + titulo + ", autor=" + autor + ", precio=" + precio + ", cantidad=" + cantidad
+				+ ", resena=" + resena + "]";
+	}
+
+	public static Integer getContador() {
+		return contador;
+	}
+
+	public static void setContador(Integer contador) {
+		Libro.contador = contador;
 	}
 
 	public String cadenaLibro() {
@@ -75,5 +92,19 @@ public class Libro implements Comentable {
 		// TODO Auto-generated method stub
 		return "Titulo: "+titulo+"\n Reseña:" +resena;
 	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if ( o instanceof Autor) {
+			Autor autor = (Autor) o;
+			return titulo.compareTo(autor.getNombre());
+		}
+		else {
+			Libro libro = (Libro) o;
+			return this.titulo.compareTo(libro.getTitulo());
+		} 
+	}
+	
 
 }// Libro
