@@ -5,35 +5,37 @@ public class GestionLibroAutor {
 		Libro[] libros = null;
 		Autor[] autores = null;
 		String  nombre = "", titulo = "";
-		Comentable comentarios[] = new Comentable[100];
+		Comentable[] comentarios = null;
 
-		Integer opcion, cuantosLibros,posLibro=0,posAutor=0,numComent=0;
+		Integer opcion, cuantosLibros;
 
 		libros = new Libro[10];
 		autores = new Autor[10];
+		comentarios = new Comentable[20];
 
-		posAutor=creaAutores(autores,posAutor,numComent,comentarios);
-		posLibro=creaLibros(autores,posLibro,libros,numComent,comentarios);
+		creaAutores(autores, comentarios);
+		creaLibros(autores,libros, comentarios);
 		
 		do {
 			
-			libros = ampliaLibros(libros, posLibro);// amplia los libros si es necesario
-			autores = ampliaAutores(autores, posAutor);// amplia los autores si es necesario
+			libros = ampliaLibros(libros);// amplia los libros si es necesario
+			autores = ampliaAutores(autores);// amplia los autores si es necesario
+			comentarios = ampliaComentarios(comentarios);// amplia los comentarios si es necesario
 			opcion = menu();//muestra menu y lee la opción
 
 			switch (opcion) {
 			case 1: // creamos un autor guardándolo en la posición posAutor
-				posAutor= creaAutor( autores, posAutor);					
+				creaAutor( autores, comentarios);					
 				break;
 			case 2: // creamos un libro guardándolo en la posición posLibro
-				if(posAutor==0){
+				if(Autor.getSiguiente()==0){
 					Leer.mostrarEnPantalla("Debe crear antes al menos un autor");
 				} else{
-					posLibro=crearLibros( posLibro, libros, autores);					
+					crearLibros( libros, autores, comentarios);					
 				}
 				break;
 			case 3: // modificar autor 				
-				if(posAutor==0){
+				if(Autor.getSiguiente()==0){
 					Leer.mostrarEnPantalla("No hay autores en la lista");
 				}else {
 					listarAutores(autores);
@@ -44,7 +46,7 @@ public class GestionLibroAutor {
 				}
 				break;
 			case 4: // modificar libro
-				if(posLibro==0){
+				if(Libro.getSiguiente()==0){
 					Leer.mostrarEnPantalla("No hay libros en la lista");
 				}else {
 					listarLibros(libros);
@@ -55,7 +57,7 @@ public class GestionLibroAutor {
 				}
 				break;
 			case 5: // listar autores
-				if(posAutor==0){
+				if(Autor.getSiguiente()==0){
 					Leer.mostrarEnPantalla("No hay autores en la lista");
 				}else {
 					listarAutores(autores);
@@ -63,115 +65,77 @@ public class GestionLibroAutor {
 
 				break;
 			case 6: // listar libros
-				if(posLibro==0){
+				if(Libro.getSiguiente()==0){
 					Leer.mostrarEnPantalla("No hay libros en la lista");
 				}else {
 					listarLibros(libros);
 				}
 				break;
-			case 7: // Comentar libros y autores
-				Integer opc=0;
-				opc=Leer.pedirEntero("Que quieres modifica? \n1.- Libros \n2.- Autores", "1|2");
-				switch (opc) {
-				case 1:
-					mostrarLibros(comentarios);
-					Integer indice = Leer.pedirEntero("introduzca el ID del Autor");
-					if (comentarios[indice] instanceof Libro) {
-						comentarios[indice].comentar(Leer.pedirCadena("introduzca reseña"));
-					}
-					else{
-						Leer.mostrarEnPantalla("Si quieres lo cambio pero es un Autor");
-					}
-					break;
-
-				case 2:
-					mostrarAutores(comentarios);
-					indice = Leer.pedirEntero("introduzca el ID del Autor");
-					if (comentarios[indice] instanceof Autor) {
-						comentarios[indice].comentar(Leer.pedirCadena("introduzca la Biografia del autor"));
-					}
-					else{
-						Leer.mostrarEnPantalla("Si quieres lo cambio pero es un Libro");
-					}
-					break;
-				
-				default:
-					break;
+			case 7: // listar comentarios
+				if(Libro.getSiguiente()+ Autor.getSiguiente()==0){
+					Leer.mostrarEnPantalla("No hay comentarios en la lista");
+				}else {
+					listarComentarios(comentarios);
 				}
-			case 8:
-				opc=Leer.pedirEntero("Que quieres ordenar? \n 1.- Libros \n 2. Autores\n 3. Comentarios", "[1-3]");
-				switch (opc) {
+				break;
+			case 8: // introducir comentarios
+				if(Libro.getSiguiente()+ Autor.getSiguiente()==0){
+					Leer.mostrarEnPantalla("No hay autores ni libros que comentar");
+				}else {
+					introComentarios(comentarios);
+				}
+				break;
+			case 9: // ordena vectores
+				Leer.mostrarEnPantalla("\n1- Ordena autores.\n2- Ordena libros.\n3- Ordena Comentarios.\n"
+                + "0- Salir.");
+				opcion = Leer.pedirEntero("\nElija opcion","[0-3]");
+				switch (opcion)
+				{
 				case 1:
-					Leer.mostrarEnPantalla(Arrays.toString(libros));
-					Arrays.sort(libros, 0, Libro.getContador());
-					Leer.mostrarEnPantalla(Arrays.toString(libros));
+					Arrays.sort(autores,0, Autor.getSiguiente());
 					break;
-
 				case 2:
-					Leer.mostrarEnPantalla(Arrays.toString(autores));
-					Arrays.sort(autores, 0, Autor.getSiguiente());
-					Leer.mostrarEnPantalla(Arrays.toString(autores));
+					Arrays.sort(libros,0, Libro.getSiguiente());
 					break;
 				case 3:
-					Leer.mostrarEnPantalla(Arrays.toString(comentarios));
-					Arrays.sort(comentarios, 0, Autor.getSiguiente()+ Libro.getContador()-2);
-					Leer.mostrarEnPantalla(Arrays.toString(comentarios));
-					break;	
-
-				default:
+					Arrays.sort(comentarios,0, sigComentario()+1);
 					break;
 				}
-			default:
 				break;
-				}
+			}
 		} while (opcion != 0);
 
 	}
 
-	private static void mostrarAutores(Comentable comentarios []) {
-		for (int i = 0; i < comentarios.length; i++) {
-			if (comentarios[i] != null && comentarios[i] instanceof Autor) {
-			Leer.mostrarEnPantalla(i+".- " + ((Autor)comentarios[i]).getNombre());
-		}
-			else if (comentarios[i] != null && !(comentarios[i] instanceof Autor)) {
-				Leer.mostrarEnPantalla("no has introducido un id de Autor correcto");
-			}
-		}
-}
-	private static void mostrarLibros(Comentable comentarios []) {
-		for (int i = 0; i < comentarios.length; i++) {
-			if (comentarios[i] != null && comentarios[i] instanceof Libro) {
-			Leer.mostrarEnPantalla(i+".- " + ((Libro)comentarios[i]).getTitulo());
-		}
-			else if (comentarios[i] != null && !(comentarios[i] instanceof Libro)) {
-				Leer.mostrarEnPantalla("no has introducido un id de libro correcto");
-			}
-	}
-}
-
 	private static Integer menu() {
 		Integer opcion;
 		Leer.mostrarEnPantalla("\n1- Crear autor.\n2- Crear libro.\n3- Modificar autor.\n" + "4- Modificar libro.\n" + "5- Listado de autores.\n"
-			+ "6- Listado de libros.\n" + "7- Comentar Libros y autores.\n"+"8- Ordenar Vector\n"+"0- Salir.");
-		opcion = Leer.pedirEntero("\nElija opcion","[0-8]");
+			+ "6- Listado de libros.\n7- Listado de comentarios.\n8- Introducir comentarios.\n9- Ordena vectores.\n" + "0- Salir.");
+		opcion = Leer.pedirEntero("\nElija opcion","[0-9]");
 		return opcion;
 	}//menu y opción
 
-	private static Autor[] ampliaAutores(Autor[] autores, Integer posAutor) {
-		if(posAutor>0.8*autores.length){
+	private static Autor[] ampliaAutores(Autor[] autores) {
+		if(Autor.getSiguiente()>0.8*autores.length){
 			autores=Arrays.copyOf(autores, autores.length+10);
 		}
 		return autores;
 	}// amplía el vector de autores cuando se supera el 80%
 
-	private static Libro[] ampliaLibros(Libro[] libros, Integer posLibro) {
-		if(posLibro>0.8*libros.length){
+	private static Libro[] ampliaLibros(Libro[] libros) {
+		if(Libro.getSiguiente()>0.8*libros.length){
 			libros=Arrays.copyOf(libros, libros.length+10);
 		}
 		return libros;
 	}// amplía el vector de libros cuando se supera el 80%
 
-	private static Integer creaAutor(Autor[] autores, Integer posAutor){
+	private static Comentable[] ampliaComentarios( Comentable[] comentarios) {
+		if(Libro.getSiguiente()+Autor.getSiguiente()>0.8*comentarios.length){
+			comentarios=Arrays.copyOf(comentarios, comentarios.length+10);
+		}
+		return comentarios;
+	}// amplía el vector de libros cuando se supera el 80%
+	private static void creaAutor(Autor[] autores, Comentable [] comentarios){
 		Autor autor;
 		String nombreAutor, email, sexo;
 		Character letraSexo;
@@ -185,19 +149,20 @@ public class GestionLibroAutor {
 			sexo = Leer.pedirCadena("Genero autor: (m)asculino (f)emenino ?","^[mMfF]$");
 			letraSexo = sexo.charAt(0);
 			autor = new Autor(nombreAutor, email, letraSexo);
-			autores[posAutor] = autor;
-			posAutor++;
+			autores[Autor.getSiguiente()-1] = autor;
+			comentarios[sigComentario()]=autor;
 			Leer.mostrarEnPantalla("Autor creado correctamente");
 		} else {// el autor ya existe
 			Leer.mostrarEnPantalla("El autor ya existe");
 		}
-		return posAutor;
+
 	}//crear autor
 
-	public static Integer crearLibros(Integer posLibros, Libro[] libros, Autor[] autores) {
+	public static void crearLibros(Libro[] libros, Autor[] autores, Comentable []comentarios) {
 		int indiceAutor, indiceTitulo;
 		String titulo, nombreAutor;
 		Autor autor;
+		Libro libro;
 		Double precio;
 		Integer cantidad;
 		// Comprobar si el libro ya esta en el vector 
@@ -217,46 +182,36 @@ public class GestionLibroAutor {
 			//pedir el resto de los datos del libro
 			precio = Leer.pedirDouble("Precio del libro?","^\\d+[.][0-9]?[0-9]?$");//decimal con un máximo de dos posiciones decimales
 			cantidad = Leer.pedirEntero("Cantidad de libros?","^\\d+$");//entero positivo
-			libros[posLibros] = new Libro(titulo, autor, precio, cantidad);
-			posLibros++;
+			libro = new Libro(titulo, autor, precio, cantidad);
+			libros[Libro.getSiguiente()-1] = libro;
+			comentarios[sigComentario()]= libro;
 			Leer.mostrarEnPantalla("Libro creado correctamente");
 		}
-		return posLibros;
 	}// crear un Libro
 
 	
-	public static Integer creaAutores(Autor []autores,Integer posAutor,Integer numComent, Comentable comentarios[]){
+	public static void creaAutores(Autor []autores, Comentable [] comentarios){
 		// creamos 3 autores
-		autores[0]= new Autor("Rosa Montero", "rmontero@gmail.com", 'f');
-		comentarios[Autor.getSiguiente()+Libro.getContador()-1]= autores[0];
-		numComent++;
-		autores[1]= new Autor("Juan Jose Millas", "jjmillas@hotmail.es",'m');
-		comentarios[Autor.getSiguiente()+Libro.getContador()-1]= autores[1];
-		numComent++;
-		autores[2]= new Autor("Almudena Grandes", "ag@gmail.com",'f');
-		comentarios[Autor.getSiguiente()+Libro.getContador()-1]= autores[2];
-		numComent++;
-		return 3;
+		autores[Autor.getSiguiente()]= new Autor("Rosa Montero", "rmontero@gmail.com", 'f');
+		comentarios[sigComentario()]=autores[Autor.getSiguiente()-1];
+		autores[Autor.getSiguiente()]= new Autor("Juan Jose Millas", "jjmillas@hotmail.es",'m');
+		comentarios[sigComentario()]=autores[Autor.getSiguiente()-1];
+		autores[Autor.getSiguiente()]= new Autor("Almudena Grandes", "ag@gmail.com",'f');
+		comentarios[sigComentario()]=autores[Autor.getSiguiente()-1];
 	}// crea 3 autores
 	
-	public static Integer creaLibros(Autor[] autores, Integer posLibro, Libro[] libros,Integer numComent,Comentable comentarios[]){
+	public static void creaLibros(Autor[] autores, Libro[] libros, Comentable[] comentarios){
 		// creamos 5 libros
-		libros[0]= new Libro("Lágrimas en la lluvia", autores[0],19.95 ,100000);
-		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[0];
-		numComent++;
-		libros[1]= new Libro("La ridícula idea de no volver a verte", autores[0], 15., 200000);
-		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[1];
-		numComent++;
-		libros[2]= new Libro("Desde la sombra", autores[1], 25., 75000);
-		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[2];
-		numComent++;
-		libros[3]= new Libro("Malena es un nombre de tango", autores[2], 22., 100000);
-		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[3];
-		numComent++;
-		libros[4]= new Libro("Las edades de Lulú", autores[2], 30., 200000);
-		comentarios[Autor.getSiguiente()+Libro.getContador()-2]= libros[4];
-		numComent++;
-		 return 5;
+		libros[Libro.getSiguiente()]= new Libro("Lágrimas en la lluvia", autores[0],19.95 ,100000);
+		comentarios[sigComentario()]=libros[Libro.getSiguiente()-1];
+		libros[Libro.getSiguiente()]= new Libro("La ridícula idea de no volver a verte", autores[0], 15., 200000);
+		comentarios[sigComentario()]=libros[Libro.getSiguiente()-1];
+		libros[Libro.getSiguiente()]= new Libro("Desde la sombra", autores[1], 25., 75000);
+		comentarios[sigComentario()]=libros[Libro.getSiguiente()-1];
+		libros[Libro.getSiguiente()]= new Libro("Malena es un nombre de tango", autores[2], 22., 100000);
+		comentarios[sigComentario()]=libros[Libro.getSiguiente()-1];
+		libros[Libro.getSiguiente()]= new Libro("Las edades de Lulú", autores[2], 30., 200000);
+		comentarios[sigComentario()]=libros[Libro.getSiguiente()-1];
 	}// crea 5 libros
 
 	public static int buscarAutor(Autor[] autores, String nombre) {
@@ -288,7 +243,7 @@ public class GestionLibroAutor {
 		Leer.mostrarEnPantalla("\nListado de autores");
 		Leer.mostrarEnPantalla("-------------------");
 		for (indiceAutor = 0; indiceAutor < autores.length && autores[indiceAutor] != null; indiceAutor++) {
-			Leer.mostrarEnPantalla("\n" + autores[indiceAutor].cadenaAutor());
+			Leer.mostrarEnPantalla(autores[indiceAutor].cadenaAutor());
 		}
 		Leer.mostrarEnPantalla("------------------------------------------------------------------");
 	}//listarAutores
@@ -298,11 +253,21 @@ public class GestionLibroAutor {
 		Leer.mostrarEnPantalla("\nListado de libros");
 		Leer.mostrarEnPantalla("------------------");
 		for (indiceLibro = 0; indiceLibro < libros.length && libros[indiceLibro] != null; indiceLibro++) {
-			Leer.mostrarEnPantalla("\n" + libros[indiceLibro].cadenaLibro());
+			Leer.mostrarEnPantalla(libros[indiceLibro].cadenaLibro());
 		}
 		Leer.mostrarEnPantalla("------------------------------------------------------------------");
 	}//listarLibros
 
+	public static int listarComentarios(Comentable[] comentarios) {
+		int indiceComen;
+		Leer.mostrarEnPantalla("\nListado de libros");
+		Leer.mostrarEnPantalla("------------------");
+		for (indiceComen = 0; indiceComen < comentarios.length && comentarios[indiceComen] != null; indiceComen++) {
+			Leer.mostrarEnPantalla((indiceComen+1) + " " +comentarios[indiceComen].comentario());
+		}
+		Leer.mostrarEnPantalla("------------------------------------------------------------------");
+		return indiceComen-1;
+	}//listarLibros
 	public static void modificarAutor(Autor [] autores, String nombre){
 		Integer indiceAutor, indice2;
 		String email, sexo;
@@ -371,4 +336,35 @@ public class GestionLibroAutor {
 			Leer.mostrarEnPantalla("Error. El libro " + titulo + " no existe");
 		}		
 	}//modificarLibro
+
+	public static void introComentarios(Comentable [] comentarios){
+		int indice, indice2;
+		String texto;
+		Autor autor;
+		indice2 = listarComentarios(comentarios);
+		do{
+			indice = Leer.pedirEntero("Introduce el número de línea sobre la que introducir el comentario: ", "^\\d+$");
+		} while(indice > indice2+1 || indice < 1);
+		//posicion del autor o -1 si no está
+
+		texto = Leer.pedirCadena("Nuevo comentario (* no cambiar)");
+		if(!texto.equals("*")){
+			comentarios[indice-1].comentar(texto);	
+		}
+	}//modificarComentario
+
+	
+	public static int sigComentario(){
+		int i = 0;
+		if (Autor.getSiguiente()!=0 && Libro.getSiguiente()==0){
+			i = Autor.getSiguiente()-1;
+		}
+		if (Libro.getSiguiente()!=0 && Autor.getSiguiente()==0){
+			i = Libro.getSiguiente()-1;
+		}
+		if (Libro.getSiguiente()!=0 && Autor.getSiguiente()!=0){
+			i = Libro.getSiguiente()+Autor.getSiguiente()-1;
+		}
+		return i;
+	}
 }// class 
