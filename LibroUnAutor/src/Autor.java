@@ -24,7 +24,7 @@ public class Autor implements Comentable, Comparable {
 	
 	@Override
 	public String toString() {
-		return "\nAutor[nombre = " + nombre + ", email = " + email + ", sexo = "+ sexo + "]";
+		return "\n" + nombre ;
 	}
 
 	public static Integer getSiguiente() {

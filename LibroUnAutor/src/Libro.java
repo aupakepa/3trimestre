@@ -23,9 +23,9 @@ public class Libro implements Comentable, Comparable {
 		contador++;
 	}
 
-	@Override
-	public String toString() {
-		return "\nLibro [titulo=" + titulo + ", autor=" + autor + ", precio=" + precio + ", cantidad=" + cantidad
+	
+	public String cadenaLibro() {
+		return "\n [titulo=" + titulo + ", autor=" + autor + ", precio=" + precio + ", cantidad=" + cantidad
 				+ ", resena=" + resena + "]";
 	}
 
@@ -37,9 +37,8 @@ public class Libro implements Comentable, Comparable {
 		Libro.contador = contador;
 	}
 
-	public String cadenaLibro() {
-		String cadena = "Libro [titulo = " + titulo  +  "; precio = " + precio + " cantidad = "
-				+ cantidad + "\n        " + autor.cadenaAutor() + "]";
+	public String toString() {
+		String cadena = "\n"+ titulo ;
 		return cadena;
 	}
 

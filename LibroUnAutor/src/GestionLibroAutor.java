@@ -114,7 +114,7 @@ public class GestionLibroAutor {
 					break;
 				case 3:
 					Leer.mostrarEnPantalla(Arrays.toString(comentarios));
-					Arrays.sort(comentarios, 0, Autor.getSiguiente()+ Libro.getContador()-2);
+					Arrays.sort(comentarios, 0, Autor.getSiguiente()+ Libro.getContador()-1);
 					Leer.mostrarEnPantalla(Arrays.toString(comentarios));
 					break;	
 
