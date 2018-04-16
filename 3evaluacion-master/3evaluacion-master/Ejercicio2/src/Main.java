@@ -39,32 +39,28 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		TreeSet<Partidos> electoral = new TreeSet<Partidos>();
+		Set<Partidos> electoral = new TreeSet<Partidos>();
 		int numPart = Leer.pedirEntero("Introduzca el numero de partidos");
 		int numVotos = Leer.pedirEntero("introduzca el numero de votos");
 		int numEscanos = Leer.pedirEntero("introduzca el numero de escaños");
-
+		
 		for (int i = 0; i < numPart; i++) {
-			String nombre = "Partido" + (i + 1);
-			Integer votos = (int) (numVotos * Math.random());
-			numVotos = numVotos - votos;
-			electoral.add(new Partidos(nombre, votos));
-		}
-		for (Partidos partido : electoral) {
-			Leer.mostrarEnPantalla(partido.getNombre() + " " + partido.getEscanos() + "  " + partido.getVotos());
-		}
-		Leer.mostrarEnPantalla("---------------------------");
-		for (int i = 0; i < numEscanos; i++) {
-			Iterator<Partidos> it = electoral.iterator();
-			Partidos partido = it.next();
-			partido.asignarEscanos();
-			it.remove();
-			electoral.add(partido);
+		String nombre = "Partido"+(i+1);
+		Integer votos = (int) (numVotos*Math.random());
+		numVotos = numVotos - votos;
+		electoral.add(new Partidos(nombre, votos));
 		}
 		
+		for (Partidos partido : electoral) {
+			Leer.mostrarEnPantalla(partido.getNombre()+" " + partido.getEscanos() +"  "+ partido.getVotos());
+		}
+		
+		for (int i = 0; i < numEscanos; i++) {
+			Iterator<Partidos> it = electoral.iterator();
+			it.next().asignarEscanos();
+		}
 		for (Partidos partidos : electoral) {
-			Leer.mostrarEnPantalla(partidos.getNombre() + " " + partidos.getVotos() + " " + partidos.getReparto() + " "
-					+ partidos.getEscanos());
+			Leer.mostrarEnPantalla(partidos.getNombre()+" " + partidos.getEscanos() +"  "+ partidos.getVotos()+partidos.getReparto());
 		}
 	}
 
