@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import utilidades.Leer;
+
 /*Ejercicio 5.
 Simulación de colas de espera en una oficina de atención a clientes.
 En una oficina de atención a clientes se disponen de 5 ventanillas para los mismos,
@@ -44,9 +46,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Integer tiempo = 0;
-		ArrayList <ArrayList> colas = new ArrayList<ArrayList>();
+		ArrayList <ArrayList<Cliente>> colas = new ArrayList<ArrayList<Cliente>>();
 		for (int i = 0; i < 5; i++) {// Crear cinco arrayList que haran la funcion de colas
-			colas.add(new ArrayList <Cliente>());
+			colas.add(new ArrayList<Cliente>());
 		}
 		
 
@@ -54,19 +56,31 @@ public class Main {
 		while (contador < 300 ) {
 			
 			if (contador%5==0) {
-			crearCliente(colas);
+			colas.get(colaMenor(colas)).add(crearCliente(colas));
 
 			}
 			for (int i = 0; i < 5; i++) {
+				if (colas.get(i).get(0)!=null) {
+					
 				((Cliente) colas.get(i).get(0)).atencion();
+				if (((Cliente) colas.get(i).get(0)).terminado()) {
+					colas.get(i).remove(0);
+			}
+				}
+				
 			}
 			contador++;
 		}
 	
+	for (ArrayList<Cliente> p : colas) {
+		for (Cliente cliente :  p) {
+			Leer.mostrarEnPantalla(cliente.toString());
+		}
+	}
 	}
 
 
-	private static Cliente crearCliente(ArrayList<ArrayList> colas) {
+	private static Cliente crearCliente(ArrayList<ArrayList<Cliente>> colas) {
 		Cliente cliente = null;
 		int tipo = (int) Math.random() * 101;
 		if (tipo > 86) {
@@ -81,7 +95,7 @@ public class Main {
 	}
 
 
-	private static Integer colaMenor(List<ArrayList> colas) {
+	private static Integer colaMenor(ArrayList<ArrayList<Cliente>> colas) {
 		Integer menor=0;
 		int contador=0;
 		int longitud = (colas.get(0)).size();

@@ -1,8 +1,10 @@
 
 public class Cliente {
 
+	private String nombre;
 	private Integer tipo;
 	private Integer cola;
+	static Integer numero = 1;
 
 	public Integer getTipo() {
 		return tipo;
@@ -24,13 +26,38 @@ public class Cliente {
 		super();
 		this.tipo = tipo;
 		this.cola = cola;
+		this.nombre = "cliente"+numero;
+		this.numero++;
 	}
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public static Integer getNumero() {
+		return numero;
+	}
+
+	public static void setNumero(Integer numero) {
+		Cliente.numero = numero;
+	}
+
 	public void atencion() {
 		this.tipo--;
-
+	}
+	public boolean terminado(){
+		if(this.tipo==0){
+			return true;
+		}else{
+			return false;
+		}
+		
 	}
 	@Override
 	public String toString() {
-		return "Cliente [tipo=" + tipo + ", cola=" + cola + "]";
+		return "Cliente [nombre=" + nombre + ", tipo=" + tipo + ", cola=" + cola + "]";
 	}
 }
