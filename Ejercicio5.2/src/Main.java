@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 import utilidades.Leer;
 
@@ -46,18 +46,32 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ArrayList<ArrayList<Cliente>> colas = new ArrayList<ArrayList<Cliente>>();
-		for (int i = 0; i < 5; i++) {// Crear cinco arrayList que haran la funcion de colas
+		for (int i = 0; i < 5; i++) {// Crear cinco arrayList que haran la
+										// funcion de colas
 			colas.add(new ArrayList<Cliente>());
 		}
 
 		int contador = 0;
-		while (contador < 299) {
-			insertarTarea(colas, contador);
-			extraerTarea(colas);
-			servirColas(colas);
+		while (contador < 300) {
+
+			if (contador % 5 == 0) {
+				colas.get(colaMenor(colas)).add(crearCliente(colas));
+
+			}
+			for (int i = 0; i < 5; i++) {
+				if (!colas.get(i).isEmpty()) {
+					colas.get(i).get(0).atencion();
+					Leer.mostrarEnPantalla(colas.get(i).get(0).toString()+" Atendido");
+					if (colas.get(i).get(0).terminado()) {
+						Leer.mostrarEnPantalla(colas.get(i).get(0).toString()+ " Sale de la cola");
+						colas.get(i).remove(0);
+					}
+				}
+
+			}
 			contador++;
 		}
-		Leer.mostrarEnPantalla("------------------------------");
+
 		for (ArrayList<Cliente> p : colas) {
 			for (Cliente cliente : p) {
 				Leer.mostrarEnPantalla(cliente.toString());
@@ -65,55 +79,20 @@ public class Main {
 		}
 	}
 
-	private static void servirColas(ArrayList<ArrayList<Cliente>> colas) {
-		ArrayList<Cliente> fila;
-		for (int i = 0; i < 5; i++) {
-			fila = colas.get(i);
-			if (!fila.isEmpty()) {
-				fila.get(0).atencion();
-
-			}
-		}
-	}
-
-	private static void insertarTarea(ArrayList<ArrayList<Cliente>> colas, int contador) {
-		if (contador % 5 == 0) {
-			colas.get(asignarCola(colas)).add(crearCliente(colas));
-
-		}
-	}
-
-	private static void extraerTarea(ArrayList<ArrayList<Cliente>> colas) {
-		ArrayList<Cliente> fila;
-		for (int i = 0; i < 5; i++) {
-			fila = colas.get(i);
-			Iterator<Cliente> it = fila.iterator();
-			while (it.hasNext()) {
-				Cliente cliente = it.next();
-				if (cliente.terminado()) {
-					Leer.mostrarEnPantalla(cliente.toString()+"  atendido");
-					it.remove();
-					
-				}
-			}
-
-		}
-	}
-
 	private static Cliente crearCliente(ArrayList<ArrayList<Cliente>> colas) {
 		Cliente cliente = null;
-		int tipo = (int) (Math.random() * 101);
+		int tipo = (int) Math.random() * 101;
 		if (tipo > 86) {
-			cliente = new Cliente(60, asignarCola(colas));
+			cliente = new Cliente(30, colaMenor(colas));
 		} else if (tipo < 86 && tipo > 60) {
-			cliente = new Cliente(30, asignarCola(colas));
+			cliente = new Cliente(20, colaMenor(colas));
 		} else {
-			cliente = new Cliente(15, asignarCola(colas));
+			cliente = new Cliente(10, colaMenor(colas));
 		}
 		return cliente;
 	}
 
-	private static Integer asignarCola(ArrayList<ArrayList<Cliente>> colas) {
+	private static Integer colaMenor(ArrayList<ArrayList<Cliente>> colas) {
 		Integer menor = 0;
 		int contador = 0;
 		int longitud = (colas.get(0)).size();

@@ -1,4 +1,4 @@
-class Cliente {
+public class Cliente {
 
 	private String nombre;
 	private Integer tipo;
@@ -26,7 +26,7 @@ class Cliente {
 		this.tipo = tipo;
 		this.cola = cola;
 		this.nombre = "cliente"+numero;
-		numero++;
+		this.numero++;
 	}
 	public String getNombre() {
 		return nombre;
@@ -45,7 +45,7 @@ class Cliente {
 	}
 
 	public void atencion() {
-		this.tipo=this.tipo - 1;
+		this.tipo--;
 	}
 	public boolean terminado(){
 		if(this.tipo==0){
