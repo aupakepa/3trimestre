@@ -10,7 +10,7 @@ public class EjemploDataOutputStream {
         FileOutputStream fichero = null; 
         DataOutputStream salida = null;
         try {
-            fichero = new FileOutputStream("ejemploDataOutputStream.dat");
+            fichero = new FileOutputStream("ejemplo.dat",true);
             salida = new DataOutputStream(fichero);
             salida.writeUTF("Ana");
             salida.writeDouble(8);

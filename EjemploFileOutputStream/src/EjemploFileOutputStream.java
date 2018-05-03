@@ -12,7 +12,7 @@ public class EjemploFileOutputStream {
             String cadena;
             int codigoDelCaracter;
             char caracter;
-            fichero = new FileOutputStream("ejemploFileOutputStream.dat");
+            fichero = new FileOutputStream("ejemploFileOutputStream.dat",true);
             cadena = Leer.pedirCadena("\nIntroduce una frase: ");
             for (int pos = 0; pos < cadena.length(); pos++) {
                 fichero.write(cadena.charAt(pos));

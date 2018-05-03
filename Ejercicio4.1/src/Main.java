@@ -24,7 +24,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		TreeMap<String, String> contraseñas = new TreeMap<>();
+		TreeMap<String, String> contrasenas = new TreeMap<>();
 		int menu = -1;
 		String usuario;
 		do {
@@ -38,13 +38,13 @@ public class Main {
 			menu = Leer.pedirEntero("introduzca una opcion de menu");
 			switch (menu) {
 			case 1:
-				crearUsuario(contraseñas);
+				crearUsuario(contrasenas);
 
 				break;
 			case 2:
 				usuario=Leer.pedirCadena("introduzca usuario que desa borrar");//error al introducir un usuario en blanco
-				if (validarContraseña(contraseñas, usuario)) {
-					contraseñas.remove(usuario);
+				if (validarContrasena(contrasenas, usuario)) {
+					contrasenas.remove(usuario);
 					Leer.mostrarEnPantalla("Usuario "+ usuario+" borrado");
 				} else {
 					Leer.mostrarEnPantalla("La contraseña no es correcta");
@@ -52,8 +52,8 @@ public class Main {
 				break;
 			case 3:
 				usuario=Leer.pedirCadena("introduzca el usuario a modificar");
-				if (validarContraseña(contraseñas, usuario)) {
-					contraseñas.replace(usuario, crearContraseña());
+				if (validarContrasena(contrasenas, usuario)) {
+					contrasenas.replace(usuario, crearContraseña());
 					Leer.mostrarEnPantalla("Usuario Modificado");
 				}else {
 					Leer.mostrarEnPantalla("contraseña no es correcta");
@@ -61,7 +61,7 @@ public class Main {
 				break;
 			case 4:
 				usuario=Leer.pedirCadena("introduzca usuario que desa validar");
-				if (validarContraseña(contraseñas, usuario)) {
+				if (validarContrasena(contrasenas, usuario)) {
 					Leer.mostrarEnPantalla("El usuario ha sido validado");
 				} else {
 					Leer.mostrarEnPantalla("El usuario no a podido ser validado");
@@ -78,11 +78,11 @@ public class Main {
 
 	}
 
-	private static boolean validarContraseña(TreeMap<String, String> contraseñas, String usuario) {
-		String contraseña = Leer.pedirCadena("Introduzca la contraseña");
-		contraseña = cifrarContraseña(contraseña);
+	private static boolean validarContrasena(TreeMap<String, String> contrasenas, String usuario) {
+		String contrasena = Leer.pedirCadena("Introduzca la contraseña");
+		contrasena = cifrarContrasena(contrasena);
 		boolean validar=false;
-		if (contraseñas.get(usuario).equals(contraseña)) {
+		if (contrasenas.get(usuario).equals(contrasena)) {
 			Leer.mostrarEnPantalla("La contraseña es correcta");
 			validar=true;
 		}
@@ -90,29 +90,29 @@ public class Main {
 	}
 
 	private static void crearUsuario(TreeMap<String, String> contraseñas) {
-		String usuario,contraseña;
+		String usuario,contrasena;
 		Boolean validar;
 		do {
 			validar = true;
 			usuario = Leer.pedirCadena("Introduzca el usuario");
-			if (contraseñas.containsKey(usuario)) {
+			if (contrasenas.containsKey(usuario)) {
 				validar = false;
 				Leer.mostrarEnPantalla("El usuario ya existe");
 			} else {
 				Leer.mostrarEnPantalla("El usuario esta disponible");
 			}
 		} while (!validar);
-		contraseña=crearContraseña();
+		contrasena=crearContrasena();
 
-		contraseña = cifrarContraseña(contraseña);
-		contraseñas.put(usuario, contraseña);
+		contrasena = cifrarContrasena(contrasena);
+		contrasenas.put(usuario, contrasena);
 	}
 
-	private static String crearContraseña() {
-		String contraseña1, contraseña2;
+	private static String crearContrasena() {
+		String contrasena1, contrasena2;
 		do {
-			contraseña1 = Leer.pedirCadena("introduzca contraseña");
-			contraseña2 = Leer.pedirCadena("vuelva a introducir contraseña");
+			contrasena1 = Leer.pedirCadena("introduzca contraseña");
+			contrasena2 = Leer.pedirCadena("vuelva a introducir contraseña");
 			if (!contraseña1.equals(contraseña2)) {
 				Leer.mostrarEnPantalla("Las contraseñas no coinciden");
 			}
@@ -128,7 +128,5 @@ public class Main {
 		}
 		return contraseñaCifrada;
 	}
-	public static void escribirFichero(Fichero fichero , TreeMap contraseñas){
-		Fichero nuevo = new Fichero("fichero.txt", "I");
-	}
+
 }
