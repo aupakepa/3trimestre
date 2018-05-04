@@ -1,11 +1,9 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import utilidades.Fecha;
 import utilidades.Leer;
 
 /*2.	Escribe un proyecto en Java que permita gestionar la venta de billetes de tren.
@@ -32,11 +30,13 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		HashMap<Fecha, Tren> trenes = new HashMap<Fecha, Tren>();
-		trenes.put(new Fecha(24, 04, 2018), new Tren());
-		trenes.put(new Fecha(27, 04, 2018), new Tren());
-		trenes.put(new Fecha(28, 04, 2018), new Tren());
-		for (Entry<Fecha, Tren> tren : trenes.entrySet()) {
+		TreeMap<Fecha, ArrayList<Tren>> trenes = new TreeMap<Fecha, ArrayList<Tren>>();
+		
+		crearTren(trenes,new Fecha(27, 04, 2018));
+		crearTren(trenes,new Fecha(27, 04, 2018));
+		crearTren(trenes,new Fecha(27, 04, 2018));
+
+		for (Entry<Fecha, ArrayList<Tren>> tren : trenes.entrySet()) {
 			Leer.mostrarEnPantalla(tren.getKey() + tren.getValue().toString());
 		}
 		ArrayList<Billete> billetes = new ArrayList<Billete>();
@@ -44,17 +44,26 @@ public class Main {
 			Iterator<Fecha> it = trenes.keySet().iterator();
 			int trenazar = (int) (Math.random() * trenes.size());
 			Fecha fecha = it.next();
-			for (int j = 0; j < trenazar - 1; j++) {
+			for (int j = 0; j < trenazar; j++) {
 				fecha = it.next();
 			}
-			Tren tren = trenes.get(fecha);
-			Vagon vagon = tren.getVagones().get(tren.getVagones().size() - 1);
+			Tren tren = trenes.get(fecha).get((int) (Math.random() * trenes.get(fecha).size()));
+			Integer vagon = tren.buscarVagon()+1;
+			Integer asiento = tren.getVagones().get(vagon-1).asientoVacio();
 			tren.venderBillete();
-			Integer asiento = vagon.getAsientos()[vagon.getProximoasiento()-1];
-			billetes.add(new Billete(fecha, vagon.getNum(), tren, asiento));
+			billetes.add(new Billete(fecha, vagon, tren, asiento));
 		}
 		for (Billete billete : billetes) {
 			Leer.mostrarEnPantalla(billete.toString());
 		}
+		Leer.mostrarEnPantalla("---------------------------------------------------");
+		for (Entry<Fecha, ArrayList<Tren>> tren : trenes.entrySet()) {
+			Leer.mostrarEnPantalla(tren.getKey() + tren.getValue().toString());
+		}
+	}
+
+	private static void crearTren(TreeMap<Fecha, ArrayList<Tren>> trenes,Fecha fecha) {
+		ArrayList<Tren> nuevo;
+		trenes.get(fecha).add(new Tren());
 	}
 }

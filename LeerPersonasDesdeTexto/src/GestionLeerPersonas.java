@@ -4,9 +4,13 @@ import java.util.List;
 public class GestionLeerPersonas implements Separable{
 
 	public static void main(String[] args) {
+		File f = new File("fichero.txt");
+		Fichero ficheroTexto;
 		List<Persona> lista = new ArrayList<>();//Lista para guardar las personas
-		Fichero ficheroTexto = new Fichero("fichero.txt","I");//Apertura del fichero de entrada.donde leemos
-		leeFichero(lista, ficheroTexto);
+		if (f.exists()){
+			ficheroTexto = new Fichero("fichero.txt","I");//Apertura del fichero de entrada.donde leemos
+			leeFichero(lista, ficheroTexto);
+		}
 		anadePersonas(lista);
 		ficheroTexto = new Fichero("fichero.txt","O");//abrimos el fichero para escritura
 		escribeFichero(lista, ficheroTexto);

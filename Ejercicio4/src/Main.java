@@ -128,7 +128,5 @@ public class Main {
 		}
 		return contraseñaCifrada;
 	}
-	public static void escribirFichero(Fichero fichero , TreeMap contraseñas){
-		Fichero nuevo = new Fichero("fichero.txt", "I");
-	}
+
 }
