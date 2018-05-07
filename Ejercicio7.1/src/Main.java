@@ -1,8 +1,8 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import utilidades.Fecha;
 import utilidades.Leer;
 
 /*2.	Escribe un proyecto en Java que permita gestionar la venta de billetes de tren.
@@ -34,18 +34,35 @@ public class Main {
 		trenes.add(new Tren(new Fecha(24, 04, 2018)));
 		trenes.add(new Tren(new Fecha(27, 04, 2018)));
 		trenes.add(new Tren(new Fecha(28, 04, 2018)));
-
 		ArrayList<Billete> billetes = new ArrayList<Billete>();
-		for (int i = 0; i < 100; i++) {
-			int trenazar = (int) (Math.random() * trenes.size());
-			Tren trenactual = trenes.get(trenazar);
-			Integer vagon = trenactual.buscarVagon()+1;
-			Fecha fecha = trenactual.getFecha();
-			Integer asiento = trenactual.getVagones().get(vagon-1).asientoVacio();
-			trenactual.venderBillete();
-			Billete ticket= new Billete(fecha, vagon, trenactual, asiento);
-			billetes.add(ticket);
+
+		File t = new File("billetes.txt");
+		if (t.exists()) {
+		Fichero leerFichero = new Fichero("billetes.txt", "I");
+		billetes = leerFichero.leer();
+		leerFichero.cerrar("I");}
+		File f = new File("trenes.txt");
+		if (f.exists()) {
+		Fichero2 leerTrenes = new Fichero2("trenes.txt", "I");
+		trenes = leerTrenes.leer();
+		leerTrenes.cerrar("I");	
 		}
+		
+
+		/*
+		 * for (int i = 0; i < 100; i++) { int trenazar = (int) (Math.random() *
+		 * trenes.size()); Tren trenactual = trenes.get(trenazar); Integer vagon =
+		 * trenactual.buscarVagon() + 1; Fecha fecha = trenactual.getFecha(); Integer
+		 * asiento = trenactual.getVagones().get(vagon - 1).asientoVacio();
+		 * trenactual.venderBillete(); Billete ticket = new Billete(fecha, vagon,
+		 * trenactual, asiento); billetes.add(ticket); Fichero escribirFichero;
+		 * escribirFichero = new Fichero("billetes.txt", "O");
+		 * escribirFichero.escribir(billetes); escribirFichero.cerrar("O"); Fichero2
+		 * escribirTrenes; escribirTrenes = new Fichero2("trenes.txt", "O");
+		 * escribirTrenes.escribir(trenes); escribirTrenes.cerrar("O");
+		 * 
+		 * }
+		 */
 		int menu = -1;
 		do {
 			Leer.mostrarEnPantalla("1.Venta de Billetes");
@@ -54,58 +71,63 @@ public class Main {
 			Leer.mostrarEnPantalla("4.Orden por num Tren");
 			Leer.mostrarEnPantalla("5.Orden por num");
 			Leer.mostrarEnPantalla("6.Listar Blletes");
-			Leer.mostrarEnPantalla("0.alir");
+			Leer.mostrarEnPantalla("0.Salir");
 			Leer.mostrarEnPantalla("-------------------------");
 			menu = Leer.pedirEntero("Introducir Opcion del menu");
 			switch (menu) {
 			case 1:
 				int i = 1;
 				for (Tren tren : trenes) {
-					Leer.mostrarEnPantalla(i+".-"+tren.toString());
+					Leer.mostrarEnPantalla(i + ".-" + tren.toString());
 					i++;
 				}
 				Leer.mostrarEnPantalla("-----------------------------");
-				Tren trenactual = trenes.get(Leer.pedirEntero("introduzca el tren para el que desea el viaje")-1);
+				Tren trenactual = trenes.get(Leer.pedirEntero("introduzca el tren para el que desea el viaje") - 1);
 				Fecha fecha = trenactual.getFecha();
-				Integer vagon = trenactual.buscarVagon()+1;
-				Integer asiento = trenactual.getVagones().get(vagon-1).asientoVacio();
+				Integer vagon = trenactual.buscarVagon() + 1;
+				Integer asiento = trenactual.getVagones().get(vagon - 1).asientoVacio();
 				trenactual.venderBillete();
-				Billete ticket = new Billete(fecha, vagon, trenactual,asiento);
+				Billete ticket = new Billete(fecha, vagon, trenactual, asiento);
 				billetes.add(ticket);
+				escribirDatos(trenes, billetes);
 				break;
 
 			case 2:
-				for (Tren tren : trenes) {
-					Leer.mostrarEnPantalla(tren.getNumero()+".-"+tren.toString());
-				}
-				Integer numeroBillete = Leer.pedirEntero("introduce el numero de billete");
 				
-				int j=0;
-				int posicion=-1;
+				int numeroBillete = Leer.pedirEntero("introduce el numero de billete");
+
+				int j = 0;
+				int posicion = -1;
 				for (Billete billete : billetes) {
-					if (billete.getNumBillete()==numeroBillete) {
-					posicion=j;
+					if (billete.getNumBillete() == numeroBillete) {
+						posicion = j;
 					}
-				j++;	
+					j++;
 				}
-				vagon = billetes.get(posicion).getVagon();
-				asiento= billetes.get(posicion).getAsiento();
-				trenactual = billetes.get(posicion).getTren();
-				trenactual.anularBillete(vagon, asiento);
 				if (posicion!=-1) {
-					billetes.remove(posicion);
-					Leer.mostrarEnPantalla("Billete : "+numeroBillete+ " anulado");
-				}else {
-					Leer.mostrarEnPantalla("El billete no es correcto");
+					vagon = billetes.get(posicion).getVagon();
+					asiento = billetes.get(posicion).getAsiento();
+					trenactual = billetes.get(posicion).getTren();
+					trenactual.anularBillete(vagon, asiento);
+					if (posicion != -1) {
+						billetes.remove(posicion);
+						Leer.mostrarEnPantalla("Billete : " + numeroBillete + " anulado");
+					} else {
+						Leer.mostrarEnPantalla("El billete no es correcto");
+					}
+					escribirDatos(trenes, billetes);	
+				} else{
+					Leer.mostrarEnPantalla("El numero de billete no existe");
 				}
+				
 				break;
+				
+			case 3:
+				Collections.sort(billetes, fechaComparator);
 
-			case 3:Collections.sort(billetes, fechaComparator);
-
-			for (Billete billete : billetes) {
-				Leer.mostrarEnPantalla(billete.toString());
-			}
-
+				for (Billete billete : billetes) {
+					Leer.mostrarEnPantalla(billete.toString());
+				}
 
 				break;
 
@@ -125,6 +147,9 @@ public class Main {
 				for (Billete billete : billetes) {
 					Leer.mostrarEnPantalla(billete.toString());
 				}
+				for (Tren tren : trenes) {
+					Leer.mostrarEnPantalla(tren.toString());
+				}
 				break;
 
 			default:
@@ -132,12 +157,21 @@ public class Main {
 			}
 		} while (menu != 0);
 
-		
 		Collections.sort(trenes);
 		Leer.mostrarEnPantalla("---------------------------------------");
 		for (Tren tren : trenes) {
 			Leer.mostrarEnPantalla(tren.toString());
 		}
+	}
+
+	private static void escribirDatos(ArrayList<Tren> trenes, ArrayList<Billete> billetes) {
+		Fichero escribirFichero;
+		escribirFichero = new Fichero("billetes.txt", "O");
+		escribirFichero.escribir(billetes);
+		escribirFichero.cerrar("O");
+		Fichero2 escribirTrenes;
+		escribirTrenes = new Fichero2("trenes.txt", "O");
+		escribirTrenes.escribir(trenes); escribirTrenes.cerrar("O");
 	}
 
 	public static Comparator<Billete> fechaComparator = new Comparator<Billete>() {
